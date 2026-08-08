@@ -53,6 +53,7 @@ model Product {
   title       String
   price       Float
   description String?
+  imageUrl    String?
   categoryId  String
   userId      String
   status      Status   @default(ACTIVE)
