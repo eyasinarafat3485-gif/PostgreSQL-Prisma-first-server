@@ -18,7 +18,9 @@ const createProduct = async (data: Prisma.ProductUncheckedCreateInput) => {
 };
 
 const getAllProducts = async (filters: { categoryId?: string; status?: Status }) => {
-  const where: Prisma.ProductWhereInput = {};
+  const where: Prisma.ProductWhereInput = {
+    isDeleted: false,
+  };
 
   if (filters.categoryId) {
     where.categoryId = filters.categoryId;
@@ -61,7 +63,7 @@ const getProductById = async (id: string) => {
     },
   });
 
-  if (!product) {
+  if (!product || product.isDeleted) {
     return null;
   }
 
@@ -78,7 +80,7 @@ const updateProduct = async (
     where: { id },
   });
 
-  if (!product) {
+  if (!product || product.isDeleted) {
     throw new Error("Product not found");
   }
 
@@ -100,7 +102,7 @@ const softDeleteProduct = async (id: string, reqUserId: string, reqUserRole: str
     where: { id },
   });
 
-  if (!product) {
+  if (!product || product.isDeleted) {
     throw new Error("Product not found");
   }
 
@@ -111,14 +113,12 @@ const softDeleteProduct = async (id: string, reqUserId: string, reqUserRole: str
     throw new Error("You do not have permission to delete this product");
   }
 
-  // 1. Delete associated reviews first to preserve relational integrity
-  await prisma.review.deleteMany({
-    where: { productId: id },
-  });
-
-  // 2. Permanently delete product row from PostgreSQL database table 'products'
-  return await prisma.product.delete({
+  // Soft delete product
+  return await prisma.product.update({
     where: { id },
+    data: {
+      isDeleted: true,
+    },
   });
 };
 

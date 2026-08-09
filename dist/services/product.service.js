@@ -6,8 +6,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductService = void 0;
 const prisma_1 = __importDefault(require("../lib/prisma"));
 const createProduct = async (data) => {
+    const { title, price, description, imageUrl, categoryId, userId, status } = data;
     return await prisma_1.default.product.create({
-        data,
+        data: {
+            title,
+            price: Number(price),
+            description: description || null,
+            imageUrl: imageUrl || null,
+            categoryId,
+            userId,
+            status: status || "ACTIVE",
+        },
     });
 };
 const getAllProducts = async (filters) => {
@@ -48,11 +57,7 @@ const getProductById = async (id) => {
                     email: true,
                 },
             },
-            reviews: {
-                where: {
-                    isDeleted: false,
-                },
-            },
+            reviews: true,
         },
     });
     if (!product || product.isDeleted) {
@@ -67,8 +72,9 @@ const updateProduct = async (id, data, reqUserId, reqUserRole) => {
     if (!product || product.isDeleted) {
         throw new Error("Product not found");
     }
+    const isAdminRole = Boolean(reqUserRole && reqUserRole.toUpperCase() === "ADMIN");
     // Creator or Admin check
-    if (product.userId !== reqUserId && reqUserRole !== "ADMIN") {
+    if (product.userId !== reqUserId && !isAdminRole) {
         throw new Error("You do not have permission to update this product");
     }
     return await prisma_1.default.product.update({
@@ -83,10 +89,12 @@ const softDeleteProduct = async (id, reqUserId, reqUserRole) => {
     if (!product || product.isDeleted) {
         throw new Error("Product not found");
     }
+    const isAdminRole = Boolean(reqUserRole && reqUserRole.toUpperCase() === "ADMIN");
     // Creator or Admin check
-    if (product.userId !== reqUserId && reqUserRole !== "ADMIN") {
+    if (product.userId !== reqUserId && !isAdminRole) {
         throw new Error("You do not have permission to delete this product");
     }
+    // Soft delete product
     return await prisma_1.default.product.update({
         where: { id },
         data: {
@@ -100,5 +108,6 @@ exports.ProductService = {
     getProductById,
     updateProduct,
     softDeleteProduct,
+    deleteProduct: softDeleteProduct,
 };
 exports.default = exports.ProductService;
