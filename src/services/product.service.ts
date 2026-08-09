@@ -4,6 +4,7 @@ import prisma from "../lib/prisma";
 const createProduct = async (data: Prisma.ProductUncheckedCreateInput) => {
   const { title, price, description, imageUrl, categoryId, userId, status } = data as any;
 
+
   return await prisma.product.create({
     data: {
       title,
@@ -86,7 +87,6 @@ const updateProduct = async (
 
   const isAdminRole = Boolean(reqUserRole && reqUserRole.toUpperCase() === "ADMIN");
 
-  // Creator or Admin check
   if (product.userId !== reqUserId && !isAdminRole) {
     throw new Error("You do not have permission to update this product");
   }
@@ -108,12 +108,10 @@ const softDeleteProduct = async (id: string, reqUserId: string, reqUserRole: str
 
   const isAdminRole = Boolean(reqUserRole && reqUserRole.toUpperCase() === "ADMIN");
 
-  // Creator or Admin check
   if (product.userId !== reqUserId && !isAdminRole) {
     throw new Error("You do not have permission to delete this product");
   }
 
-  // Soft delete product
   return await prisma.product.update({
     where: { id },
     data: {
