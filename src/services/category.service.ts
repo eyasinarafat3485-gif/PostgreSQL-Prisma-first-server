@@ -7,6 +7,7 @@ const createCategory = async (data: Prisma.CategoryCreateInput) => {
   });
 };
 
+
 const getAllCategories = async () => {
   return await prisma.category.findMany({
     where: {
@@ -21,16 +22,15 @@ const getCategoryById = async (id: string) => {
       id,
     },
   });
-  
+
   if (!category || category.isDeleted) {
     return null;
   }
-  
+
   return category;
 };
 
 const updateCategory = async (id: string, data: Prisma.CategoryUpdateInput) => {
-  // Ensure the category exists and is not soft deleted before updating
   const category = await getCategoryById(id);
   if (!category) {
     throw new Error("Category not found");
@@ -45,7 +45,6 @@ const updateCategory = async (id: string, data: Prisma.CategoryUpdateInput) => {
 };
 
 const softDeleteCategory = async (id: string) => {
-  // Ensure the category exists and is not soft deleted before deleting
   const category = await getCategoryById(id);
   if (!category) {
     throw new Error("Category not found");
