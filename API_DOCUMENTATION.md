@@ -5,7 +5,8 @@ Production-ready, scalable RESTful API built with **Express.js**, **TypeScript**
 ---
 
 ## 📌 Base URL
-`http://localhost:5000/api` (Local Development)
+- **Production (Vercel)**: `https://postgre-sql-prisma-first-server.vercel.app/api/v1`
+- **Local Development**: `http://localhost:5000/api/v1`
 
 ---
 
@@ -42,11 +43,11 @@ All API responses strictly adhere to the standardized JSON payload envelope form
 
 ---
 
-## 🔑 1. Auth Endpoints (`/api/auth`)
+## 🔑 1. Auth Endpoints (`/api/v1/auth`)
 
 ### 1.1 Register User
 - **Method**: `POST`
-- **Endpoint**: `/api/auth/register`
+- **Endpoint**: `/api/v1/auth/register`
 - **Access**: Public
 - **Description**: Creates a new user account with hashed password.
 
@@ -80,7 +81,7 @@ All API responses strictly adhere to the standardized JSON payload envelope form
 
 ### 1.2 Login User
 - **Method**: `POST`
-- **Endpoint**: `/api/auth/login`
+- **Endpoint**: `/api/v1/auth/login`
 - **Access**: Public
 - **Description**: Authenticates user and returns JWT token.
 
@@ -111,25 +112,25 @@ All API responses strictly adhere to the standardized JSON payload envelope form
 
 ---
 
-## 👤 2. User Endpoints (`/api/users`)
+## 👤 2. User Endpoints (`/api/v1/users`)
 
 ### 2.1 Get All Users
 - **Method**: `GET`
-- **Endpoint**: `/api/users`
+- **Endpoint**: `/api/v1/users`
 - **Access**: Private (Admin)
 
 ### 2.2 Get User by ID
 - **Method**: `GET`
-- **Endpoint**: `/api/users/:id`
+- **Endpoint**: `/api/v1/users/:id`
 - **Access**: Private
 
 ---
 
-## 📁 3. Category Endpoints (`/api/categories`)
+## 📁 3. Category Endpoints (`/api/v1/categories`)
 
 ### 3.1 Get All Categories
 - **Method**: `GET`
-- **Endpoint**: `/api/categories`
+- **Endpoint**: `/api/v1/categories`
 - **Access**: Public
 - **Response (`200 OK`)**:
 ```json
@@ -145,16 +146,16 @@ All API responses strictly adhere to the standardized JSON payload envelope form
 
 ### 3.2 Create Category
 - **Method**: `POST`
-- **Endpoint**: `/api/categories`
+- **Endpoint**: `/api/v1/categories`
 - **Access**: Private (Admin)
 
 ---
 
-## 📦 4. Product Endpoints (`/api/products`)
+## 📦 4. Product Endpoints (`/api/v1/products`)
 
 ### 4.1 Get All Products
 - **Method**: `GET`
-- **Endpoint**: `/api/products`
+- **Endpoint**: `/api/v1/products`
 - **Query Parameters**:
   - `categoryId` (optional): Filter by category ID
   - `status` (optional): Filter by `ACTIVE` / `PENDING` / `INACTIVE`
@@ -186,7 +187,7 @@ All API responses strictly adhere to the standardized JSON payload envelope form
 
 ### 4.2 Create Product
 - **Method**: `POST`
-- **Endpoint**: `/api/products`
+- **Endpoint**: `/api/v1/products`
 - **Access**: Private (Authenticated User / Admin)
 
 #### Request Body:
@@ -205,23 +206,23 @@ All API responses strictly adhere to the standardized JSON payload envelope form
 
 ### 4.3 Update Product
 - **Method**: `PUT`
-- **Endpoint**: `/api/products/:id`
+- **Endpoint**: `/api/v1/products/:id`
 - **Access**: Private (Product Creator / Admin)
 
 ---
 
 ### 4.4 Delete Product
 - **Method**: `DELETE`
-- **Endpoint**: `/api/products/:id`
+- **Endpoint**: `/api/v1/products/:id`
 - **Access**: Private (Product Creator / Admin)
 
 ---
 
-## ⭐ 5. Review Endpoints (`/api/reviews`)
+## ⭐ 5. Review Endpoints (`/api/v1/reviews`)
 
 ### 5.1 Create Review
 - **Method**: `POST`
-- **Endpoint**: `/api/reviews`
+- **Endpoint**: `/api/v1/reviews`
 - **Access**: Private (Authenticated User)
 
 #### Request Body:
